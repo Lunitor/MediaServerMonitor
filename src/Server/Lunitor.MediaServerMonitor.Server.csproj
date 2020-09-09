@@ -10,7 +10,7 @@
     <PackageReference Include="MediatR" Version="8.1.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="3.2.0" />
-    <PackageReference Include="VersionEndpoint.Middleware" Version="0.1.0" />
+    <PackageReference Include="VersionEndpoint.Middleware" Version="0.1.1" />
   </ItemGroup>
 
   <ItemGroup>
