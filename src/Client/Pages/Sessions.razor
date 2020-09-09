@@ -1,0 +1,93 @@
+﻿@page "/"
+@using Lunitor.MediaServerMonitor.Shared
+@inject HttpClient Http
+
+<h1>Sessions</h1>
+
+@if (sessions == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+
+    @for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+    {
+        <div class="row mt-lg-4">
+            @for (int colIndex = 0; colIndex < columnCount; colIndex++)
+            {
+                var sessionIndex = rowIndex * columnCount + colIndex;
+                @if (sessionIndex < sessions.Length)
+                {
+                    var session = sessions[sessionIndex];
+                    <div class="col-lg-3">
+                        <div class="card">
+                                <div class="card-header text-indigo h5">
+                                    @if (session.UserName != null)
+                                    {
+                                        <span class="oi oi-person oi-middle align-middle"></span>
+                                        <span class="align-middle w-80 d-inline-block">@session.UserName</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="oi oi-cog oi-middle align-middle"></span>
+                                        <span class="align-middle w-80 d-inline-block">Service</span>
+                                    }
+
+                                    @if (session.NowPlaying)
+                                    { 
+                                <div class="d-inline-block align-middle w-220">
+                                    <div class="h6 align-middle overflow-hidden float-right m-auto" style="max-width: 200px">
+                                        <span class="nowplaying align-middle">@session.NowPlayingItemName</span>
+                                    </div>
+                                    <span class="oi oi-play-circle oi-middle align-middle float-right m-auto"></span>
+                                </div>
+                                    }
+                                </div>
+                            <div class="card-body">
+                                <p class="card-text">Client: @session.Client</p>
+                                <p class="card-text">Device name: @session.DeviceName</p>
+                                <p class="card-text">
+                                    Admin/Service:
+                                    @if (session.IsAdminOrService)
+                                    {
+                                        <span class="oi oi-check text-success"></span>
+                                    }
+                                    else
+                                    {
+                                        <span class="oi oi-x text-danger"></span>
+                                    }
+                                    &emsp;
+                                    Active:
+                                    @if (session.IsActive)
+                                    {
+                                        <span class="oi oi-check text-success"></span>
+                                    }
+                                    else
+                                    {
+                                        <span class="oi oi-x text-danger"></span>
+                                    }
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    }
+}
+
+@code {
+    private SessionDto[] sessions;
+
+    private int columnCount = 4;
+    private int rowCount;
+
+    protected override async Task OnInitializedAsync()
+    {
+        sessions = await Http.GetFromJsonAsync<SessionDto[]>("sessions");
+
+        rowCount = (int)Math.Ceiling(sessions.Length / (double)columnCount);
+    }
+}
+
