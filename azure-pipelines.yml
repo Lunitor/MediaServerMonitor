@@ -10,10 +10,15 @@ pool:
   vmImage: 'windows-latest'
 
 variables:
-  solution: '**/*.sln'
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  solutionName: 'Lunitor.MediaServerMonitor'
+  - group: 'Build Variables'
+  - name: solution
+    value: '**/*.sln'
+  - name:  buildPlatform
+    value: 'Any CPU'
+  - name: buildConfiguration
+    value: 'Release'
+  - name: solutionName
+    value: 'Lunitor.MediaServerMonitor'
 
 steps:
 
@@ -22,7 +27,7 @@ steps:
     command: 'restore'
     projects: '**/*.sln'
     feedsToUse: 'select'
-    vstsFeed: '89168acf-a74f-48ae-acbb-004b81944d9d'
+    vstsFeed: $(VstsFeed)
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet build $(buildConfiguration)'
